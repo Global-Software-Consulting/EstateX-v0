@@ -7,9 +7,9 @@ import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabase"
 
 const navLinks = [
-  { label: "Buy", href: "#listings" },
-  { label: "Rent", href: "#listings" },
-  { label: "Agents", href: "#cities" },
+  { label: "Buy", href: "/listings?category=buy" },
+  { label: "Rent", href: "/listings?category=rent" },
+  { label: "Listings", href: "/listings" },
 ]
 
 export function EstateNav() {
@@ -40,22 +40,22 @@ export function EstateNav() {
       )}
     >
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-        <a href="#" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2">
           <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-foreground text-background">
             <Building2 className="h-4 w-4" />
           </span>
           <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
-        </a>
+        </Link>
 
         <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.label}
               href={link.href}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </div>
 
@@ -88,14 +88,14 @@ export function EstateNav() {
         <div className="border-t border-border bg-background/90 px-5 py-4 backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-1">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
                 className="rounded-sm px-2 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
             {loggedIn ? (
               <Link href="/dashboard" className="mt-2 block rounded-sm bg-foreground px-4 py-2.5 text-center text-sm font-medium text-background transition-opacity hover:opacity-90">
