@@ -108,12 +108,12 @@ export type City = {
 }
 
 export const cities: City[] = [
-  { name: "New York", state: "NY", listings: 642, image: "/cities/new-york.png" },
-  { name: "Los Angeles", state: "CA", listings: 518, image: "/cities/los-angeles.png" },
-  { name: "Miami", state: "FL", listings: 394, image: "/cities/miami.png" },
-  { name: "Chicago", state: "IL", listings: 271, image: "/cities/chicago.png" },
-  { name: "San Francisco", state: "CA", listings: 233, image: "/cities/san-francisco.png" },
-  { name: "Austin", state: "TX", listings: 188, image: "/cities/austin.png" },
+  { name: "Karachi", state: "Sindh", listings: 842, image: "/cities/new-york.png" },
+  { name: "Lahore", state: "Punjab", listings: 618, image: "/cities/los-angeles.png" },
+  { name: "Islamabad", state: "ICT", listings: 494, image: "/cities/miami.png" },
+  { name: "Rawalpindi", state: "Punjab", listings: 271, image: "/cities/chicago.png" },
+  { name: "Peshawar", state: "KPK", listings: 153, image: "/cities/san-francisco.png" },
+  { name: "Multan", state: "Punjab", listings: 128, image: "/cities/austin.png" },
 ]
 
 export const propertyTypes = ["House", "Apartment", "Villa", "Townhouse", "Loft", "Cabin"] as const

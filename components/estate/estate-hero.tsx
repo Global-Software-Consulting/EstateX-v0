@@ -22,47 +22,44 @@ export function EstateHero() {
   }
 
   return (
-    <section className="relative grid min-h-screen grid-cols-1 lg:grid-cols-2">
-      {/* Left: cinematic image with Ken Burns zoom */}
-      <div className="relative h-[55vh] overflow-hidden lg:h-screen">
+    <section className="relative h-screen overflow-hidden">
+      {/* Full-bleed hero image */}
+      <div className="absolute inset-0">
         <img
-          src="/properties/hero-villa.png"
-          alt="Modern luxury villa at dusk with infinity pool"
+          src="/house-3.jpg"
+          alt="Beautiful craftsman home with landscaped garden at golden hour"
           className="ken-burns h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-background" />
-        <div className="absolute bottom-6 left-6 z-10 max-w-xs">
-          <p className="font-mono text-xs uppercase tracking-widest text-foreground/70">Featured</p>
-          <p className="mt-1 font-display text-2xl">Luxury Villa, DHA Karachi</p>
-          <p className="font-mono text-sm text-foreground/70">PKR 45,000,000</p>
-        </div>
+        {/* Cinematic gradient — dark enough for text but image still shines through */}
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/5 to-background/30" />
       </div>
 
-      {/* Right: search UI */}
-      <div className="relative flex items-center px-5 py-16 md:px-12 lg:px-16">
+      {/* Content over image */}
+      <div className="relative mx-auto flex h-full max-w-7xl items-center px-5 md:px-8">
         <div className="w-full max-w-xl">
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/50">
             EstateX — Real Estate, Reimagined
           </p>
-          <h1 className="mt-5 text-balance font-display text-6xl leading-[0.95] md:text-7xl lg:text-8xl">
+          <h1 className="mt-5 text-balance font-display text-4xl leading-[0.95] sm:text-5xl md:text-6xl lg:text-8xl">
             Find Your
             <br />
             Next <span className="word-gradient">Home</span>
           </h1>
-          <p className="mt-6 max-w-md text-pretty leading-relaxed text-muted-foreground">
+          <p className="mt-6 max-w-md text-pretty leading-relaxed text-foreground/60">
             Browse thousands of curated properties across Pakistan&apos;s most desirable cities. Buy or rent with
             confidence.
           </p>
 
           {/* Buy / Rent toggle */}
-          <div className="mt-8 inline-flex rounded-sm border border-border bg-card p-1">
+          <div className="mt-8 inline-flex rounded-sm border border-white/10 bg-background/40 p-1 backdrop-blur-md">
             {(["buy", "rent"] as const).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
                 className={cn(
                   "rounded-[2px] px-6 py-2 text-sm capitalize transition-colors",
-                  mode === m ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground",
+                  mode === m ? "bg-foreground text-background" : "text-foreground/60 hover:text-foreground",
                 )}
               >
                 {m}
@@ -73,23 +70,23 @@ export function EstateHero() {
           {/* Search row */}
           <form
             onSubmit={(e) => { e.preventDefault(); handleSearch() }}
-            className="mt-4 flex flex-col gap-3 rounded-sm border border-border bg-card p-3 sm:flex-row sm:items-center"
+            className="mt-4 flex flex-col gap-3 rounded-sm border border-white/10 bg-background/40 p-3 backdrop-blur-md sm:flex-row sm:items-center"
           >
-            <div className="flex flex-1 items-center gap-2 border-b border-border px-2 py-2 sm:border-b-0 sm:border-r">
-              <MapPin className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <div className="flex flex-1 items-center gap-2 border-b border-white/10 px-2 py-2 sm:border-b-0 sm:border-r">
+              <MapPin className="h-4 w-4 shrink-0 text-foreground/40" />
               <input
                 type="text"
                 placeholder="City or neighborhood"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                className="w-full bg-transparent text-sm outline-none placeholder:text-foreground/30"
               />
             </div>
             <div className="relative flex flex-1 items-center px-2 py-2">
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full appearance-none bg-transparent text-sm text-muted-foreground outline-none"
+                className="w-full appearance-none bg-transparent text-sm text-foreground/50 outline-none"
               >
                 <option value="" className="bg-card">Any type</option>
                 {propertyTypes.map((t) => (
@@ -98,7 +95,7 @@ export function EstateHero() {
                   </option>
                 ))}
               </select>
-              <ChevronDown className="pointer-events-none h-4 w-4 text-muted-foreground" />
+              <ChevronDown className="pointer-events-none h-4 w-4 text-foreground/40" />
             </div>
             <button
               type="submit"
@@ -109,7 +106,7 @@ export function EstateHero() {
             </button>
           </form>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
+          <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-foreground/30 sm:gap-x-6">
             <span>Popular:</span>
             {["Karachi", "Lahore", "Islamabad", "Rawalpindi"].map((c) => (
               <button

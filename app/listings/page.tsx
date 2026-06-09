@@ -96,7 +96,7 @@ function ListingsContent() {
   return (
     <section className="mx-auto max-w-7xl px-5 pb-20 pt-28 md:px-8 md:pb-28 md:pt-32">
       <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Browse</p>
-      <h1 className="mt-3 text-balance font-display text-5xl leading-none md:text-6xl">All Properties</h1>
+      <h1 className="mt-3 text-balance font-display text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">All Properties</h1>
 
       {/* Filters */}
       <div className="mt-10 flex flex-col gap-4 rounded-sm border border-border bg-card p-4 sm:flex-row sm:items-center">
@@ -184,7 +184,7 @@ function ListingsContent() {
                     {p.location ? `${p.location}, ` : ""}{p.city}
                   </p>
 
-                  <div className="mt-4 flex items-center gap-5 border-t border-border pt-4 font-mono text-sm text-muted-foreground">
+                  <div className="mt-4 flex flex-wrap items-center gap-3 border-t border-border pt-4 font-mono text-sm text-muted-foreground sm:gap-5">
                     <span className="flex items-center gap-1.5">
                       <Bed className="h-4 w-4" />
                       {p.bedrooms}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Bed, Bath, Maximize, ArrowUpRight, Loader2 } from "lucide-react"
+import { Bed, Bath, Maximize, ArrowUpRight, Loader2, MapPin } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { getImageUrl } from "@/lib/image-url"
 
@@ -72,87 +72,105 @@ export function EstateListings() {
   }, [])
 
   return (
-    <section id="listings" className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
-      <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Curated Selection</p>
-          <h2 className="mt-3 text-balance font-display text-5xl leading-none md:text-6xl">Featured Listings</h2>
+    <section id="listings" className="relative z-10 bg-background">
+      <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
+        <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Curated Selection</p>
+            <h2 className="mt-3 text-balance font-display text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">Featured Listings</h2>
+          </div>
+          <Link
+            href="/listings"
+            className="rounded-sm border border-border px-5 py-2.5 text-sm transition-colors hover:bg-secondary"
+          >
+            View all properties
+          </Link>
         </div>
-        <Link
-          href="/listings"
-          className="rounded-sm border border-border px-5 py-2.5 text-sm transition-colors hover:bg-secondary"
-        >
-          View all properties
-        </Link>
+
+        {loading ? (
+          <div className="mt-12 flex items-center justify-center py-20">
+            <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+          </div>
+        ) : error ? (
+          <div className="mt-12 rounded-sm border border-destructive/30 bg-destructive/10 px-4 py-3">
+            <p className="text-sm text-destructive">{error}</p>
+          </div>
+        ) : properties.length === 0 ? (
+          <p className="mt-12 text-center text-sm text-muted-foreground">No featured properties at the moment.</p>
+        ) : (
+          <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {properties.map((p) => (
+              <Link
+                key={p.id}
+                href={`/properties/${p.id}`}
+                className="group relative overflow-hidden rounded-sm border border-border"
+              >
+                {/* Image */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src={p.cover_url || "/placeholder.svg"}
+                    alt={`${p.title} in ${p.city}`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+
+                  {/* Badges — always visible */}
+                  <span className="absolute left-3 top-3 z-10 rounded-sm bg-background/80 px-2.5 py-1 font-mono text-xs uppercase tracking-wider backdrop-blur-sm">
+                    {p.type}
+                  </span>
+                  <span className="absolute right-3 top-3 z-10 rounded-sm bg-foreground/90 px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-background">
+                    {p.category}
+                  </span>
+
+                  {/* Default state — title + city at bottom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent transition-opacity duration-300 group-hover:opacity-0" />
+                  <div className="absolute bottom-4 left-4 z-10 transition-all duration-300 group-hover:translate-y-4 group-hover:opacity-0">
+                    <h3 className="font-display text-xl leading-tight">{p.title}</h3>
+                    <p className="mt-0.5 flex items-center gap-1 text-xs text-foreground/60">
+                      <MapPin className="h-3 w-3" />
+                      {p.location ? `${p.location}, ` : ""}{p.city}
+                    </p>
+                  </div>
+
+                  {/* Hover state — full data overlay slides up */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="absolute inset-x-0 bottom-0 z-10 translate-y-6 p-5 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                    {/* Price */}
+                    <p className="font-mono text-2xl tracking-tight">{formatPrice(p.price)}</p>
+
+                    {/* Title */}
+                    <h3 className="mt-1 font-display text-xl leading-tight">{p.title}</h3>
+
+                    {/* Location */}
+                    <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                      <MapPin className="h-3 w-3" />
+                      {p.location ? `${p.location}, ` : ""}{p.city}
+                    </p>
+
+                    {/* Specs */}
+                    <div className="mt-3 flex items-center gap-4 font-mono text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Bed className="h-3.5 w-3.5" /> {p.bedrooms} Beds
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Bath className="h-3.5 w-3.5" /> {p.bathrooms} Baths
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Maximize className="h-3.5 w-3.5" /> {p.area_sqft.toLocaleString()}
+                      </span>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="mt-3 flex items-center justify-between rounded-sm border border-border/50 bg-card/50 px-4 py-2.5 text-sm backdrop-blur-sm">
+                      View details
+                      <ArrowUpRight className="h-4 w-4" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
-
-      {loading ? (
-        <div className="mt-12 flex items-center justify-center py-20">
-          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-        </div>
-      ) : error ? (
-        <div className="mt-12 rounded-sm border border-destructive/30 bg-destructive/10 px-4 py-3">
-          <p className="text-sm text-destructive">{error}</p>
-        </div>
-      ) : properties.length === 0 ? (
-        <p className="mt-12 text-center text-sm text-muted-foreground">No featured properties at the moment.</p>
-      ) : (
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {properties.map((p) => (
-            <article
-              key={p.id}
-              className="group hover-lift overflow-hidden rounded-sm border border-border bg-card"
-            >
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <img
-                  src={p.cover_url || "/placeholder.svg"}
-                  alt={`${p.title} in ${p.city}`}
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <span className="absolute left-3 top-3 rounded-sm bg-background/80 px-2.5 py-1 font-mono text-xs uppercase tracking-wider backdrop-blur-sm">
-                  {p.type}
-                </span>
-                <span className="absolute right-3 top-3 rounded-sm bg-foreground/90 px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-background">
-                  {p.category}
-                </span>
-              </div>
-
-              <div className="p-5">
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="font-mono text-2xl tracking-tight">{formatPrice(p.price)}</span>
-                </div>
-                <h3 className="mt-2 font-display text-2xl leading-none">{p.title}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  {p.location ? `${p.location}, ` : ""}{p.city}
-                </p>
-
-                <div className="mt-4 flex items-center gap-5 border-t border-border pt-4 font-mono text-sm text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <Bed className="h-4 w-4" />
-                    {p.bedrooms}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Bath className="h-4 w-4" />
-                    {p.bathrooms}
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <Maximize className="h-4 w-4" />
-                    {p.area_sqft.toLocaleString()} sqft
-                  </span>
-                </div>
-
-                <Link
-                  href={`/properties/${p.id}`}
-                  className="mt-5 flex w-full items-center justify-between rounded-sm border border-border px-4 py-2.5 text-sm transition-colors hover:bg-foreground hover:text-background"
-                >
-                  View details
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
     </section>
   )
 }

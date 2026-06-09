@@ -3,6 +3,7 @@ import { EstateHero } from "@/components/estate/estate-hero"
 import { EstateStats } from "@/components/estate/estate-stats"
 import { EstateListings } from "@/components/estate/estate-listings"
 import { EstateCities } from "@/components/estate/estate-cities"
+import { EstateTestimonials } from "@/components/estate/estate-testimonials"
 import { EstateCta } from "@/components/estate/estate-cta"
 import { EstateFooter } from "@/components/estate/estate-footer"
 
@@ -14,6 +15,7 @@ export default function Home() {
       <EstateStats />
       <EstateListings />
       <EstateCities />
+      <EstateTestimonials />
       <EstateCta />
       <EstateFooter />
     </main>

@@ -29,7 +29,7 @@ function StatItem({ stat }: { stat: Stat }) {
 
 export function EstateStats() {
   return (
-    <section className="border-y border-border bg-card">
+    <section className="relative z-10 border-b border-border bg-background">
       <div className="mx-auto grid max-w-5xl grid-cols-1 gap-10 px-5 py-16 sm:grid-cols-3 md:px-8 md:py-20">
         {stats.map((stat) => (
           <StatItem key={stat.label} stat={stat} />

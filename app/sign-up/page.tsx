@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Building2, ArrowUpRight } from "lucide-react"
+import { Building2, ArrowUpRight, Eye, EyeOff } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,6 +15,7 @@ export default function SignUpPage() {
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -35,7 +36,7 @@ export default function SignUpPage() {
       return
     }
 
-    router.push("/dashboard")
+    router.push("/")
   }
 
   return (
@@ -43,8 +44,8 @@ export default function SignUpPage() {
       {/* Left: cinematic image panel */}
       <div className="relative hidden overflow-hidden lg:block">
         <img
-          src="/properties/hero-villa.png"
-          alt="Modern luxury villa"
+          src="/properties/listing-1.png"
+          alt="Modern glass residence"
           className="ken-burns h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background" />
@@ -53,7 +54,7 @@ export default function SignUpPage() {
         {/* Overlay content */}
         <div className="absolute bottom-12 left-10 right-10 z-10">
           <p className="font-mono text-xs uppercase tracking-[0.3em] text-foreground/60">EstateX</p>
-          <h2 className="mt-3 font-display text-5xl leading-[0.95]">
+          <h2 className="mt-3 font-display text-3xl leading-[0.95] lg:text-5xl">
             Start Your <span className="word-gradient">Journey</span>
           </h2>
           <p className="mt-4 max-w-sm text-pretty leading-relaxed text-foreground/60">
@@ -79,7 +80,7 @@ export default function SignUpPage() {
             <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
           </Link>
 
-          <h1 className="mt-8 font-display text-4xl leading-[0.95] md:text-5xl">
+          <h1 className="mt-8 font-display text-3xl leading-[0.95] sm:text-4xl md:text-5xl">
             Create Account
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
@@ -121,16 +122,21 @@ export default function SignUpPage() {
               <Label htmlFor="password" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                 Password
               </Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                minLength={6}
-                className="h-12 rounded-sm border-border bg-card px-4 text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20"
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="h-12 rounded-sm border-border bg-card px-4 pr-11 text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20"
+                />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground">
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
               <p className="font-mono text-[10px] text-muted-foreground/50">Minimum 6 characters</p>
             </div>
 

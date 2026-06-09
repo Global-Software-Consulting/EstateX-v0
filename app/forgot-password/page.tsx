@@ -42,7 +42,7 @@ export default function ForgotPasswordPage() {
           <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
         </Link>
 
-        <h1 className="mt-8 font-display text-4xl leading-[0.95] md:text-5xl">
+        <h1 className="mt-8 font-display text-3xl leading-[0.95] sm:text-4xl md:text-5xl">
           Reset Password
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

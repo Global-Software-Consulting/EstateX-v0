@@ -19,7 +19,7 @@ export function EstateFooter() {
           <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
         </a>
 
-        <nav className="flex flex-wrap items-center justify-center gap-x-7 gap-y-2">
+        <nav className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-7">
           {footerLinks.map((link) => (
             <a
               key={link.label}
