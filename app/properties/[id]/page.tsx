@@ -136,18 +136,18 @@ export default function PropertyPage() {
     <main className="relative min-h-screen overflow-x-hidden">
       <EstateNav />
       <div className="mx-auto max-w-7xl px-5 pb-20 pt-24 md:px-8 md:pb-28 md:pt-28">
-        <Link href="/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+        <Link href="/listings" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-orange-500">
           <ArrowLeft className="h-4 w-4" /> Back to listings
         </Link>
 
         {loading ? (
-          <div className="mt-20 flex items-center justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-muted-foreground" /></div>
+          <div className="mt-20 flex items-center justify-center py-20"><Loader2 className="h-6 w-6 animate-spin text-orange-500" /></div>
         ) : error ? (
-          <div className="mt-8 rounded-sm border border-destructive/30 bg-destructive/10 px-4 py-3"><p className="text-sm text-destructive">{error}</p></div>
+          <div className="mt-8 rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3"><p className="text-sm text-destructive">{error}</p></div>
         ) : property ? (
           <>
             {/* Image gallery */}
-            <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-sm border border-border bg-card md:aspect-[2.4/1]">
+            <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-2xl border border-border bg-card md:aspect-[2.4/1]">
               {property.images.length > 0 ? (
                 <>
                   <img src={property.images[activeImage].url} alt={property.title} className="h-full w-full object-cover" />
@@ -157,7 +157,7 @@ export default function PropertyPage() {
                       <button onClick={nextImage} className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/70 backdrop-blur-sm transition-colors hover:bg-background"><ChevronRight className="h-5 w-5" /></button>
                       <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
                         {property.images.map((_, i) => (
-                          <button key={i} onClick={() => setActiveImage(i)} className={`h-1.5 rounded-full transition-all ${i === activeImage ? "w-6 bg-foreground" : "w-1.5 bg-foreground/40"}`} />
+                          <button key={i} onClick={() => setActiveImage(i)} className={`h-1.5 rounded-full transition-all ${i === activeImage ? "w-6 bg-orange-500" : "w-1.5 bg-foreground/40"}`} />
                         ))}
                       </div>
                     </>
@@ -166,9 +166,9 @@ export default function PropertyPage() {
               ) : (
                 <div className="flex h-full items-center justify-center"><Home className="h-12 w-12 text-muted-foreground/20" /></div>
               )}
-              <span className="absolute left-4 top-4 rounded-sm bg-background/80 px-2.5 py-1 font-mono text-xs uppercase tracking-wider backdrop-blur-sm">{property.type}</span>
-              <span className="absolute right-4 top-4 rounded-sm bg-foreground/90 px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-background">{property.category}</span>
-              {/* Save button on image (only for other people's properties) */}
+              <span className="absolute left-4 top-4 rounded-full bg-background/80 px-3 py-1 font-mono text-xs uppercase tracking-wider backdrop-blur-sm">{property.type}</span>
+              <span className="absolute right-4 top-4 rounded-full bg-orange-500 px-3 py-1 font-mono text-xs uppercase tracking-wider text-white">{property.category}</span>
+              {/* Save button on image */}
               {(!userId || userId !== property.agent_id) && (
                 <button
                   onClick={toggleSave}
@@ -184,7 +184,7 @@ export default function PropertyPage() {
             {property.images.length > 1 && (
               <div className="mt-3 flex gap-2 overflow-x-auto">
                 {property.images.map((img, i) => (
-                  <button key={img.id} onClick={() => setActiveImage(i)} className={`h-16 w-24 shrink-0 overflow-hidden rounded-sm border transition-all ${i === activeImage ? "border-foreground" : "border-border opacity-50 hover:opacity-80"}`}>
+                  <button key={img.id} onClick={() => setActiveImage(i)} className={`h-16 w-24 shrink-0 overflow-hidden rounded-xl border transition-all ${i === activeImage ? "border-orange-500" : "border-border opacity-50 hover:opacity-80"}`}>
                     <img src={img.url} alt="" className="h-full w-full object-cover" />
                   </button>
                 ))}
@@ -194,7 +194,7 @@ export default function PropertyPage() {
             {/* Content grid */}
             <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-3">
               <div className="lg:col-span-2">
-                <span className="font-mono text-2xl tracking-tight sm:text-3xl md:text-4xl">{formatPrice(property.price)}</span>
+                <span className="font-mono text-2xl tracking-tight text-orange-500 sm:text-3xl md:text-4xl">{formatPrice(property.price)}</span>
                 <h1 className="mt-3 font-display text-3xl leading-[0.95] sm:text-4xl md:text-5xl">{property.title}</h1>
                 <p className="mt-2 text-sm text-muted-foreground">{property.location ? `${property.location}, ` : ""}{property.city}</p>
 
@@ -206,7 +206,7 @@ export default function PropertyPage() {
 
                 {property.description && (
                   <div className="mt-8">
-                    <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Description</h2>
+                    <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-orange-500">Description</h2>
                     <p className="mt-4 leading-relaxed text-muted-foreground">{property.description}</p>
                   </div>
                 )}
@@ -216,12 +216,12 @@ export default function PropertyPage() {
               <div className="lg:col-span-1">
                 <div className="lg:sticky lg:top-24 space-y-4">
                   {/* Agent card */}
-                  <div className="rounded-sm border border-border bg-card p-6">
+                  <div className="rounded-2xl border border-border bg-card p-6">
                     <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Listed by</h3>
                     {property.agent ? (
                       <div className="mt-4">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-secondary font-mono text-lg uppercase text-foreground">{(property.agent.full_name || "A").charAt(0)}</div>
+                          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-50 font-mono text-lg uppercase text-orange-500">{(property.agent.full_name || "A").charAt(0)}</div>
                           <div>
                             <p className="font-medium">{property.agent.full_name || "Agent"}</p>
                             {property.agent.phone && <p className="text-xs text-muted-foreground">{property.agent.phone}</p>}
@@ -231,27 +231,27 @@ export default function PropertyPage() {
                           {userId === property.agent_id ? (
                             <Link
                               href="/dashboard"
-                              className="flex w-full items-center justify-center gap-2 rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90"
+                              className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600"
                             >
                               <Pencil className="h-4 w-4" /> Manage in Dashboard
                             </Link>
                           ) : (
                             <>
                               {property.agent.phone && (
-                                <a href={`tel:${property.agent.phone}`} className="flex w-full items-center justify-center gap-2 rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90">
+                                <a href={`tel:${property.agent.phone}`} className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600">
                                   <Phone className="h-4 w-4" /> Call Agent
                                 </a>
                               )}
                               <button
                                 onClick={() => { if (!userId) { router.push("/sign-in"); return } setShowInquiry(!showInquiry) }}
-                                className="flex w-full items-center justify-center gap-2 rounded-sm border border-border px-5 py-3 text-sm transition-colors hover:bg-secondary"
+                                className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-medium transition-colors hover:border-orange-300 hover:bg-orange-50 hover:text-orange-600"
                               >
                                 <Mail className="h-4 w-4" /> Send Inquiry
                               </button>
                               <button
                                 onClick={toggleSave}
                                 disabled={saveLoading}
-                                className="flex w-full items-center justify-center gap-2 rounded-sm border border-border px-5 py-3 text-sm transition-colors hover:bg-secondary"
+                                className="flex w-full items-center justify-center gap-2 rounded-xl border border-border px-5 py-3 text-sm font-medium transition-colors hover:border-orange-300 hover:bg-orange-50 hover:text-orange-600"
                               >
                                 <Heart className={`h-4 w-4 ${saved ? "fill-red-500 text-red-500" : ""}`} />
                                 {saved ? "Saved" : "Save Property"}
@@ -265,42 +265,42 @@ export default function PropertyPage() {
                     )}
                   </div>
 
-                  {/* Inquiry form (only for other people's properties) */}
+                  {/* Inquiry form */}
                   {showInquiry && userId !== property.agent_id && (
-                    <div className="rounded-sm border border-border bg-card p-6">
+                    <div className="rounded-2xl border border-border bg-card p-6">
                       <div className="flex items-center justify-between">
                         <h3 className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Send Inquiry</h3>
                         <button onClick={() => setShowInquiry(false)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
                       </div>
 
                       {inquirySent ? (
-                        <div className="mt-4 rounded-sm border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
-                          <p className="text-sm text-emerald-400">Inquiry sent! The agent will contact you soon.</p>
+                        <div className="mt-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3">
+                          <p className="text-sm text-emerald-500">Inquiry sent! The agent will contact you soon.</p>
                         </div>
                       ) : (
                         <form onSubmit={handleInquiry} className="mt-4 space-y-4">
                           <div className="space-y-2">
                             <Label className="font-mono text-xs uppercase tracking-widest text-muted-foreground">I want to</Label>
-                            <div className="flex rounded-sm border border-border bg-background p-1">
+                            <div className="flex rounded-xl border border-border bg-background p-1">
                               {(["buy", "rent", "viewing"] as const).map((t) => (
                                 <button key={t} type="button" onClick={() => setInquiryType(t)}
-                                  className={`flex-1 rounded-[2px] px-3 py-2 text-xs capitalize transition-colors ${inquiryType === t ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground"}`}
+                                  className={`flex-1 rounded-lg px-3 py-2 text-xs capitalize transition-all duration-300 ${inquiryType === t ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25" : "text-muted-foreground hover:text-foreground"}`}
                                 >{t === "viewing" ? "Book Viewing" : t}</button>
                               ))}
                             </div>
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="inq-phone" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Your Phone</Label>
-                            <Input id="inq-phone" type="tel" value={inquiryPhone} onChange={(e) => setInquiryPhone(e.target.value)} placeholder="03XX-XXXXXXX" className="h-10 rounded-sm border-border bg-background text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20" />
+                            <Input id="inq-phone" type="tel" value={inquiryPhone} onChange={(e) => setInquiryPhone(e.target.value)} placeholder="03XX-XXXXXXX" className="h-10 rounded-xl border-border bg-background text-sm placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-orange-500/20" />
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="inq-msg" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Message</Label>
                             <textarea id="inq-msg" value={inquiryMessage} onChange={(e) => setInquiryMessage(e.target.value)} placeholder="I'm interested in this property..." rows={3}
-                              className="w-full rounded-sm border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-[3px] focus-visible:ring-foreground/20" />
+                              className="w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-[3px] focus-visible:ring-orange-500/20" />
                           </div>
                           {inquiryError && <p className="text-sm text-destructive">{inquiryError}</p>}
                           <button type="submit" disabled={inquiryLoading}
-                            className="flex w-full items-center justify-center gap-2 rounded-sm bg-foreground px-5 py-3 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50">
+                            className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600 disabled:opacity-50">
                             {inquiryLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                             {inquiryLoading ? "Sending..." : "Send Inquiry"}
                           </button>

@@ -26,7 +26,7 @@ export function EstateCta() {
         </p>
         <Link
           href={loggedIn ? "/dashboard" : "/sign-in"}
-          className="mt-9 flex items-center gap-2 rounded-sm bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+          className="mt-9 flex items-center gap-2 rounded-xl bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600 hover:shadow-orange-500/40"
         >
           List Your Property
           <ArrowUpRight className="h-4 w-4" />

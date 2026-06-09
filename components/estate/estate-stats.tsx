@@ -20,7 +20,7 @@ function StatItem({ stat }: { stat: Stat }) {
     <div className="flex flex-col items-center text-center">
       <span ref={ref} className="font-mono text-5xl tracking-tight md:text-7xl">
         {count.toLocaleString()}
-        {stat.suffix}
+        <span className="text-orange-500">{stat.suffix}</span>
       </span>
       <span className="mt-2 font-mono text-xs uppercase tracking-[0.25em] text-muted-foreground">{stat.label}</span>
     </div>

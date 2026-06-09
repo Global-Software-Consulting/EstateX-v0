@@ -76,12 +76,12 @@ export function EstateListings() {
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-end">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">Curated Selection</p>
+            <p className="font-mono text-xs uppercase tracking-[0.3em] text-orange-500">Curated Selection</p>
             <h2 className="mt-3 text-balance font-display text-3xl leading-none sm:text-4xl md:text-5xl lg:text-6xl">Featured Listings</h2>
           </div>
           <Link
             href="/listings"
-            className="rounded-sm border border-border px-5 py-2.5 text-sm transition-colors hover:bg-secondary"
+            className="rounded-xl border border-orange-200 bg-orange-50 px-5 py-2.5 text-sm font-medium text-orange-600 transition-colors hover:bg-orange-100"
           >
             View all properties
           </Link>
@@ -117,7 +117,7 @@ export function EstateListings() {
                   <span className="absolute left-3 top-3 z-10 rounded-sm bg-background/80 px-2.5 py-1 font-mono text-xs uppercase tracking-wider backdrop-blur-sm">
                     {p.type}
                   </span>
-                  <span className="absolute right-3 top-3 z-10 rounded-sm bg-foreground/90 px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-background">
+                  <span className="absolute right-3 top-3 z-10 rounded-full bg-orange-500 px-2.5 py-1 font-mono text-xs uppercase tracking-wider text-white">
                     {p.category}
                   </span>
 
@@ -160,7 +160,7 @@ export function EstateListings() {
                     </div>
 
                     {/* CTA */}
-                    <div className="mt-3 flex items-center justify-between rounded-sm border border-border/50 bg-card/50 px-4 py-2.5 text-sm backdrop-blur-sm">
+                    <div className="mt-3 flex items-center justify-between rounded-xl bg-orange-500 px-4 py-2.5 text-sm font-semibold text-white">
                       View details
                       <ArrowUpRight className="h-4 w-4" />
                     </div>

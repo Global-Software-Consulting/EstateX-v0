@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Building2, ArrowUpRight, Eye, EyeOff } from "lucide-react"
+import { Home, ArrowUpRight, Eye, EyeOff } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -40,8 +40,8 @@ export default function SignInPage() {
       {/* Left: cinematic image panel */}
       <div className="relative hidden overflow-hidden lg:block">
         <img
-          src="/properties/listing-4.png"
-          alt="Luxury oceanview property"
+          src="/hero-signin.jpg"
+          alt="Modern luxury villa exterior"
           className="ken-burns h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background" />
@@ -69,11 +69,11 @@ export default function SignInPage() {
       <div className="flex items-center justify-center px-5 py-16 md:px-12 lg:px-16">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <Link href="/" className="inline-flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-foreground text-background">
-              <Building2 className="h-4 w-4" />
+          <Link href="/" className="inline-flex items-center gap-2.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500 text-white">
+              <Home className="h-4 w-4" />
             </span>
-            <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
+            <span className="text-xl font-bold tracking-tight">Estate<span className="text-orange-500">X</span></span>
           </Link>
 
           <h1 className="mt-8 font-display text-3xl leading-[0.95] sm:text-4xl md:text-5xl">
@@ -95,7 +95,7 @@ export default function SignInPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 rounded-sm border-border bg-card px-4 text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20"
+                className="h-12 rounded-xl border-border bg-card px-4 text-sm placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-orange-500/20"
               />
             </div>
 
@@ -106,7 +106,7 @@ export default function SignInPage() {
                 </Label>
                 <Link
                   href="/forgot-password"
-                  className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground transition-colors hover:text-foreground"
+                  className="font-mono text-[10px] uppercase tracking-widest text-orange-500 transition-colors hover:text-orange-600"
                 >
                   Forgot?
                 </Link>
@@ -119,7 +119,7 @@ export default function SignInPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-12 rounded-sm border-border bg-card px-4 pr-11 text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20"
+                  className="h-12 rounded-xl border-border bg-card px-4 pr-11 text-sm placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-orange-500/20"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground">
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -128,7 +128,7 @@ export default function SignInPage() {
             </div>
 
             {error && (
-              <div className="rounded-sm border border-destructive/30 bg-destructive/10 px-4 py-3">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3">
                 <p className="text-sm text-destructive">{error}</p>
               </div>
             )}
@@ -136,7 +136,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-sm bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600 disabled:opacity-50"
             >
               {loading ? "Signing in…" : "Sign In"}
               {!loading && <ArrowUpRight className="h-4 w-4" />}
@@ -153,7 +153,7 @@ export default function SignInPage() {
             Don&apos;t have an account?{" "}
             <Link
               href="/sign-up"
-              className="text-foreground underline underline-offset-4 transition-colors hover:text-foreground/80"
+              className="font-medium text-orange-500 transition-colors hover:text-orange-600"
             >
               Sign Up
             </Link>

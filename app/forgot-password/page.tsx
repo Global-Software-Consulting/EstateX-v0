@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Building2, ArrowLeft } from "lucide-react"
+import { Home, ArrowLeft } from "lucide-react"
 import { supabase } from "@/lib/supabase"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -35,11 +35,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <Link href="/" className="inline-flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-sm bg-foreground text-background">
-            <Building2 className="h-4 w-4" />
+        <Link href="/" className="inline-flex items-center gap-2.5">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-orange-500 text-white">
+            <Home className="h-4 w-4" />
           </span>
-          <span className="font-display text-2xl leading-none tracking-tight">EstateX</span>
+          <span className="text-xl font-bold tracking-tight">Estate<span className="text-orange-500">X</span></span>
         </Link>
 
         <h1 className="mt-8 font-display text-3xl leading-[0.95] sm:text-4xl md:text-5xl">
@@ -50,8 +50,8 @@ export default function ForgotPasswordPage() {
         </p>
 
         {success ? (
-          <div className="mt-8 rounded-sm border border-emerald-500/30 bg-emerald-500/10 px-4 py-4">
-            <p className="text-sm text-emerald-400">
+          <div className="mt-8 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-4">
+            <p className="text-sm text-emerald-500">
               Check your email! We&apos;ve sent a password reset link to <strong>{email}</strong>.
             </p>
           </div>
@@ -68,12 +68,12 @@ export default function ForgotPasswordPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-12 rounded-sm border-border bg-card px-4 text-sm placeholder:text-muted-foreground/50 focus-visible:border-foreground focus-visible:ring-foreground/20"
+                className="h-12 rounded-xl border-border bg-card px-4 text-sm placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-orange-500/20"
               />
             </div>
 
             {error && (
-              <div className="rounded-sm border border-destructive/30 bg-destructive/10 px-4 py-3">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3">
                 <p className="text-sm text-destructive">{error}</p>
               </div>
             )}
@@ -81,7 +81,7 @@ export default function ForgotPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-sm bg-foreground px-7 py-3.5 text-sm font-medium text-background transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-orange-500/25 transition-all hover:bg-orange-600 disabled:opacity-50"
             >
               {loading ? "Sending..." : "Send Reset Link"}
             </button>
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
         <p className="mt-8 text-center">
           <Link
             href="/sign-in"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-orange-500"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Back to Sign In

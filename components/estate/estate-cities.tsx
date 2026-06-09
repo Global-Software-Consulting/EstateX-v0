@@ -43,9 +43,9 @@ export function EstateCities() {
             <Link
               key={city.name}
               href={`/listings?city=${city.name}`}
-              className="group flex flex-col items-center gap-2 rounded-lg border border-border/50 bg-card/50 px-3 py-4 text-center transition-all duration-300 hover:border-foreground/20 hover:bg-card"
+              className="group flex flex-col items-center gap-2 rounded-xl border border-border/50 bg-card/50 px-3 py-4 text-center transition-all duration-300 hover:border-orange-300 hover:bg-orange-50"
             >
-              <MapPin className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-foreground" />
+              <MapPin className="h-4 w-4 text-muted-foreground transition-colors group-hover:text-orange-500" />
               <span className="text-sm font-medium">{city.name}</span>
               <span className="font-mono text-[10px] text-muted-foreground">{city.listings} listings</span>
             </Link>

@@ -75,7 +75,7 @@ export function EstateTestimonials() {
           viewport={{ once: true }}
           className="mx-auto flex max-w-xl flex-col items-center"
         >
-          <span className="rounded-sm border border-border px-4 py-1.5 font-mono text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          <span className="rounded-full border border-orange-200 bg-orange-50 px-4 py-1.5 font-mono text-xs uppercase tracking-[0.3em] text-orange-600">
             Testimonials
           </span>
 
