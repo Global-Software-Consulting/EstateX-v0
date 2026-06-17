@@ -87,8 +87,15 @@ export default function DashboardPage() {
   ]
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.replace("/sign-in"); return }
+      // Ensure a profiles row exists for this user. properties.agent_id has an FK
+      // to profiles, so without this the first "Add Property" insert fails (23503).
+      // Safe to run every load: onConflict(id) makes it a no-op if it already exists.
+      await supabase.from("profiles").upsert(
+        { id: user.id, full_name: user.user_metadata?.full_name ?? null },
+        { onConflict: "id", ignoreDuplicates: true },
+      )
       setUser(user)
       setLoading(false)
     })
@@ -181,12 +188,23 @@ export default function DashboardPage() {
 
   function handleCancelEdit() { setEditingId(null); setForm({ ...emptyForm }); setImageFiles([]); setFormError(""); setFormSuccess(false) }
 
-  async function uploadImages(propertyId: string, agentId: string) {
+  async function uploadImages(propertyId: string, agentId: string): Promise<boolean> {
+    const uploadedPaths: string[] = []
+    // Undo any partial work (storage files + image rows) so a failure leaves nothing behind.
+    const rollback = async () => {
+      if (uploadedPaths.length === 0) return
+      await supabase.from("property_images").delete().eq("property_id", propertyId).in("storage_path", uploadedPaths)
+      await supabase.storage.from("property-images").remove(uploadedPaths)
+    }
     for (let i = 0; i < imageFiles.length; i++) {
       const file = imageFiles[i]; const path = `${agentId}/${propertyId}/${file.name}`
-      const { error } = await supabase.storage.from("property-images").upload(path, file, { upsert: true })
-      if (!error) await supabase.from("property_images").insert({ property_id: propertyId, storage_path: path, is_cover: i === 0 })
+      const { error: uploadError } = await supabase.storage.from("property-images").upload(path, file, { upsert: false })
+      if (uploadError) { await rollback(); setFormError(`Image upload failed: ${uploadError.message}`); return false }
+      uploadedPaths.push(path)
+      const { error: insertError } = await supabase.from("property_images").insert({ property_id: propertyId, storage_path: path, is_cover: i === 0 })
+      if (insertError) { await rollback(); setFormError(`Saving image record failed: ${insertError.message}`); return false }
     }
+    return true
   }
 
   async function handleSubmitProperty(e: React.FormEvent) {
@@ -197,12 +215,22 @@ export default function DashboardPage() {
     if (editingId) {
       const { error } = await supabase.from("properties").update(payload).eq("id", editingId).eq("agent_id", user.id)
       if (error) { setFormError(error.message); setFormLoading(false); return }
-      if (imageFiles.length > 0) await uploadImages(editingId, user.id)
+      if (imageFiles.length > 0) {
+        const ok = await uploadImages(editingId, user.id)
+        if (!ok) { setFormLoading(false); fetchProperties(); return }
+      }
       setFormSuccess(true); setFormLoading(false); setEditingId(null); setForm({ ...emptyForm }); setImageFiles([]); fetchProperties()
     } else {
       const { data, error } = await supabase.from("properties").insert({ ...payload, agent_id: user.id }).select("id").single()
       if (error || !data) { setFormError(error?.message || "Failed"); setFormLoading(false); return }
-      if (imageFiles.length > 0) await uploadImages(data.id, user.id)
+      if (imageFiles.length > 0) {
+        const ok = await uploadImages(data.id, user.id)
+        if (!ok) {
+          // Images failed → roll back the just-created property so nothing is stored.
+          await supabase.from("properties").delete().eq("id", data.id).eq("agent_id", user.id)
+          setFormLoading(false); fetchProperties(); return
+        }
+      }
       setFormSuccess(true); setFormLoading(false); setForm({ ...emptyForm }); setImageFiles([]); fetchProperties()
     }
   }
