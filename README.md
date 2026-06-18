@@ -92,7 +92,7 @@ A premium real estate listing platform for browsing, buying, and renting curated
 - Responsive across all screen sizes (320px to 4K)
 - Mobile hamburger menu with adaptive colors
 - Glassmorphism search bar and form elements
-- PKR currency formatting
+- EUR (euro) currency formatting
 - Animated statistics with scroll-triggered counters
 - Testimonials section with animated scrolling columns
 

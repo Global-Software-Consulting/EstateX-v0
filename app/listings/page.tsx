@@ -28,7 +28,7 @@ const propertyTypes = ["All", "House", "Apartment", "Villa", "Townhouse", "Loft"
 const categories = ["All", "buy", "rent"] as const
 
 function formatPrice(price: number) {
-  return `PKR ${price.toLocaleString()}`
+  return `€${price.toLocaleString()}`
 }
 
 function ListingsContent() {

@@ -6,8 +6,8 @@ ElevenLabs agent's Knowledge Base. (Live listings and prices are NOT here — th
 
 ## About EstateX
 EstateX is a real estate platform for browsing, buying, and renting curated properties across
-Pakistan's major cities. Visitors can search listings, view photos and details, send inquiries to
-the listing agent, and save favorites. All prices are in Pakistani Rupees (PKR).
+Europe's major cities. Visitors can search listings, view photos and details, send inquiries to
+the listing agent, and save favorites. All prices are in Euros (EUR, €).
 
 ## Browsing listings
 - Anyone can browse listings without an account.
@@ -19,8 +19,8 @@ the listing agent, and save favorites. All prices are in Pakistani Rupees (PKR).
   that tool whenever a visitor asks what's available, prices, or anything about specific properties.
 
 ## Buy vs Rent
-- **Buy**: properties listed for sale. The price shown is the sale price in PKR.
-- **Rent**: properties available to rent. The price shown is the rent in PKR.
+- **Buy**: properties listed for sale. The price shown is the sale price in euros (€).
+- **Rent**: properties available to rent. The price shown is the monthly rent in euros (€).
 - A visitor chooses Buy or Rent using the category filter, or just tells the assistant which they want.
 
 ## How buying works on EstateX (important)
@@ -51,8 +51,8 @@ On a property's detail page, send an inquiry of type **Viewing** to request an i
 agent coordinates a time with you.
 
 ## Pricing
-- All prices are displayed in PKR.
-- For a sale (Buy), the number is the total purchase price. For Rent, it's the rental price.
+- All prices are displayed in euros (€) and spoken as "euros".
+- For a sale (Buy), the number is the total purchase price. For Rent, it's the monthly rental price.
 - There are no platform fees shown to buyers for browsing or inquiring. Any commissions or charges
   are arranged directly between the buyer/renter and the listing agent.
 
@@ -76,8 +76,9 @@ favorites"). If the visitor isn't signed in, the assistant will ask them to sign
 4. Manage your listings, see buyer inquiries, and update their status from the dashboard.
 
 ## Cities
-EstateX features properties across major Pakistani cities including Lahore, Karachi, Islamabad, and
-more. Ask the assistant to search a specific city to see current availability.
+EstateX features properties across major European cities including Paris, Amsterdam, Lisbon, Berlin,
+London, Barcelona, Rome, and more. Ask the assistant to search a specific city to see current
+availability.
 
 ## What the assistant should do
 - For "what's available / prices / specific properties" → call the listings search tool and
@@ -89,4 +90,4 @@ more. Ask the assistant to search a specific city to see current availability.
   send a Buy/Rent/Viewing inquiry. If a visitor isn't signed in when they ask for one of these,
   invite them to sign up (free) first. These actions are available while browsing the public pages,
   not inside the dashboard.
-- Always be concise, friendly, and specific. Prices are in PKR.
+- Always be concise, friendly, and specific. Prices are in euros (€).

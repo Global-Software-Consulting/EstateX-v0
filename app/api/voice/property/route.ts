@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
-import { pkrSpoken, spokenSummary } from "@/lib/voice-format"
+import { eurSpoken, spokenSummary } from "@/lib/voice-format"
 
 // Anon client — reads only ACTIVE listings, which RLS already exposes publicly.
 const supabase = createClient(
@@ -69,8 +69,8 @@ export async function GET(req: NextRequest) {
     type: p.type,
     city: p.city,
     location: p.location,
-    price_pkr: p.price,
-    price_spoken: `${pkrSpoken(p.price)} PKR`,
+    price_eur: p.price,
+    price_spoken: `${eurSpoken(p.price)} euros`,
     bedrooms: p.bedrooms,
     bathrooms: p.bathrooms,
     area_sqft: p.area_sqft,

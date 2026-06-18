@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
-import { pkrSpoken } from "@/lib/voice-format"
+import { eurSpoken } from "@/lib/voice-format"
 
 // Anon client — reads only ACTIVE listings (publicly exposed by RLS).
 const supabase = createClient(
@@ -51,9 +51,9 @@ export async function GET() {
     const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length)
     return {
       count: group.length,
-      min_spoken: `${pkrSpoken(min)} PKR`,
-      max_spoken: `${pkrSpoken(max)} PKR`,
-      avg_spoken: `${pkrSpoken(avg)} PKR`,
+      min_spoken: `${eurSpoken(min)} euros`,
+      max_spoken: `${eurSpoken(max)} euros`,
+      avg_spoken: `${eurSpoken(avg)} euros`,
     }
   }
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
-import { pkrSpoken, spokenSummary } from "@/lib/voice-format"
+import { eurSpoken, spokenSummary } from "@/lib/voice-format"
 
 // Anon client — reads only ACTIVE listings (publicly exposed by RLS).
 const supabase = createClient(
@@ -49,8 +49,8 @@ export async function GET(req: NextRequest) {
     city: p.city,
     type: p.type,
     category: p.category,
-    price_pkr: p.price,
-    price_spoken: `${pkrSpoken(p.price)} PKR`,
+    price_eur: p.price,
+    price_spoken: `${eurSpoken(p.price)} euros`,
     bedrooms: p.bedrooms,
     bathrooms: p.bathrooms,
     area_sqft: p.area_sqft,
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
   }))
 
   // Pick out the standout properties so the agent can contrast them directly.
-  const cheapest = items.reduce((a, b) => (b.price_pkr < a.price_pkr ? b : a))
+  const cheapest = items.reduce((a, b) => (b.price_eur < a.price_eur ? b : a))
   const largest = items.reduce((a, b) => (b.area_sqft > a.area_sqft ? b : a))
   const mostBeds = items.reduce((a, b) => (b.bedrooms > a.bedrooms ? b : a))
 

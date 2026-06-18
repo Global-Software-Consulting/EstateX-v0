@@ -10,7 +10,7 @@ pieces fit together. It's meant as the single reference for anyone working on th
 
 EstateX embeds an ElevenLabs **Conversational AI** widget — a floating voice assistant that
 visitors can talk to on the public pages (landing, listings, property detail). It acts as a
-real-estate concierge: it searches live listings, explains pricing in PKR, compares properties,
+real-estate concierge: it searches live listings, explains pricing in euros, compares properties,
 estimates mortgages, and guides visitors on how to inquire, save, or sign up.
 
 The agent's "brain" (persona, rules, tool-routing) lives in the **System Prompt**, configured in
@@ -35,7 +35,7 @@ Visitor speaks ──▶ ElevenLabs agent (cloud)
 | `components/voice-agent.tsx` | Renders the `<elevenlabs-convai>` widget; registers the **client tools**. |
 | `app/layout.tsx` | Mounts `<VoiceAgent />` so it appears on every page. |
 | `app/api/voice/*/route.ts` | The **webhook (server) tools** — public, read-only API endpoints. |
-| `lib/voice-format.ts` | Shared formatting helpers (`pkrSpoken`, `spokenSummary`) used by all webhook tools. |
+| `lib/voice-format.ts` | Shared formatting helpers (`eurSpoken`, `spokenSummary`) used by all webhook tools. |
 | `docs/voice-knowledge-base.md` | The Knowledge Base document to upload to the agent. |
 
 ### Environment variables used
@@ -81,7 +81,7 @@ All of these are **public, read-only** Next.js route handlers under `app/api/voi
 anon Supabase client and only read **active** listings (which RLS already exposes publicly), so no
 secrets are involved. Each returns voice-friendly fields:
 
-- `price_spoken` — how to *say* the price, e.g. `"350 million PKR"` (millions format).
+- `price_spoken` — how to *say* the price, e.g. `"350 million euros"` (millions format).
 - `spoken_summary` — a full sentence the agent can read aloud, so the LLM doesn't have to assemble
   numbers itself (faster speech, fewer misreads).
 - `url` — a clickable link to the property page.
@@ -89,9 +89,9 @@ secrets are involved. Each returns voice-friendly fields:
 These helpers come from `lib/voice-format.ts`:
 
 ```ts
-pkrSpoken(350_000_000)  // "350 million"
+eurSpoken(350_000_000)  // "350 million"
 spokenSummary(property) // "DHA Phase 6 Villa: a House in DHA Phase 6, Lahore, for sale at
-                        //  350 million PKR, with 5 beds and 6 baths, 4,500 square feet."
+                        //  350 million euros, with 5 beds and 6 baths, 4,500 square feet."
 ```
 
 ### 4.1 `search_listings` — find listings
@@ -105,7 +105,7 @@ spokenSummary(property) // "DHA Phase 6 Villa: a House in DHA Phase 6, Lahore, f
   | `city` | partial city match | `city=Lahore` |
   | `category` | `buy` or `rent` | `category=rent` |
   | `type` | House / Apartment / Villa / … | `type=Apartment` |
-  | `max_price` | PKR ceiling | `max_price=20000000` |
+  | `max_price` | euro ceiling | `max_price=20000000` |
   | `min_bedrooms` | minimum beds | `min_bedrooms=3` |
   | `limit` | how many to return (default 4, max 10) | `limit=5` |
 - **Example:**
@@ -120,7 +120,7 @@ spokenSummary(property) // "DHA Phase 6 Villa: a House in DHA Phase 6, Lahore, f
       "category": "buy",
       "type": "House",
       "city": "Lahore",
-      "price_spoken": "350 million PKR",
+      "price_spoken": "350 million euros",
       "bedrooms": 5,
       "bathrooms": 6,
       "spoken_summary": "DHA Phase 6 Villa: a House in DHA Phase 6, Lahore, for sale ...",
@@ -224,7 +224,7 @@ expose on public pages. As with all property actions, `id` always comes from a p
 
 ### 5.5 `list_my_saved` — read back favorites
 - **Purpose:** "What have I saved?" → reads the visitor's `saved_properties` joined to
-  `properties`, returns names + prices (PKR millions).
+  `properties`, returns names + prices (euros, in millions).
 - **Params:** none.
 
 ### 5.6 `create_inquiry` — send an inquiry to the agent
@@ -253,11 +253,11 @@ This is enforced in the System Prompt (see `docs/` and the dashboard) and suppor
 
 ## 7. How a real conversation flows (example)
 
-> **Visitor:** "Do you have any villas in Lahore under 40 crore?"
+> **Visitor:** "Do you have any villas in Lahore under 4 million euros?"
 >
 > **Agent:** "Let me check our current listings…" *(bridge line)*
 > → calls `search_listings?q=villa&city=Lahore&category=buy`
-> → "Yes — the DHA Phase 6 Villa in Lahore, 350 million PKR, 5 beds and 6 baths. Want me to open
+> → "Yes — the DHA Phase 6 Villa in Lahore, 350 million euros, 5 beds and 6 baths. Want me to open
 > it?"
 >
 > **Visitor:** "Yeah, show me."

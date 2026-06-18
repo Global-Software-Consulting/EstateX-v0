@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@supabase/supabase-js"
-import { pkrSpoken, spokenSummary } from "@/lib/voice-format"
+import { eurSpoken, spokenSummary } from "@/lib/voice-format"
 
 // Anon client — this endpoint only reads ACTIVE listings, which your RLS policy
 // ("Anyone can view active properties") already exposes publicly. No secrets here.
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   const category = sp.get("category")        // "buy" | "rent"
   const type = sp.get("type")                // "House" | "Apartment" | "Villa" | ...
   const city = sp.get("city")                // partial match, e.g. "Lahore"
-  const maxPrice = sp.get("max_price")       // PKR number
+  const maxPrice = sp.get("max_price")       // EUR number
   const minBedrooms = sp.get("min_bedrooms") // number
   // Free-text keyword, e.g. "villa", "mansion", "DHA". Matches title/description/
   // location too, so words people use ("villa") still find listings whose TYPE is
@@ -58,8 +58,8 @@ export async function GET(req: NextRequest) {
     type: p.type,
     city: p.city,
     location: p.location,
-    price_pkr: p.price,
-    price_spoken: `${pkrSpoken(p.price)} PKR`, // how to SAY the price, e.g. "35 crore PKR"
+    price_eur: p.price,
+    price_spoken: `${eurSpoken(p.price)} euros`, // how to SAY the price, e.g. "1.85 million euros"
     bedrooms: p.bedrooms,
     bathrooms: p.bathrooms,
     area_sqft: p.area_sqft,

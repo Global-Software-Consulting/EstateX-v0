@@ -31,7 +31,7 @@ type SavedRow = {
 }
 
 const propertyTypes = ["House", "Apartment", "Villa", "Townhouse", "Loft", "Cabin"] as const
-function formatPrice(price: number) { return `PKR ${price.toLocaleString()}` }
+function formatPrice(price: number) { return `€${price.toLocaleString()}` }
 const emptyForm = { title: "", description: "", price: "", type: "House", category: "buy", bedrooms: "", bathrooms: "", area_sqft: "", city: "", location: "" }
 
 export default function DashboardPage() {
@@ -564,7 +564,7 @@ export default function DashboardPage() {
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2 sm:col-span-2"><Label htmlFor="title" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Title</Label><Input id="title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. DHA Phase 6 Villa" required className={inputClass} /></div>
                   <div className="space-y-2 sm:col-span-2"><Label htmlFor="description" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Description</Label><textarea id="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Describe the property..." rows={4} className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-[3px] focus-visible:ring-orange-500/20" /></div>
-                  <div className="space-y-2"><Label htmlFor="price" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Price (PKR)</Label><Input id="price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="85000000" required className={inputClass} /></div>
+                  <div className="space-y-2"><Label htmlFor="price" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Price (EUR)</Label><Input id="price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="850000" required className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="type" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Property Type</Label><select id="type" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="h-12 w-full rounded-xl border border-border bg-card px-4 text-sm outline-none focus-visible:border-orange-500 focus-visible:ring-[3px] focus-visible:ring-orange-500/20">{propertyTypes.map((t) => <option key={t} value={t} className="bg-card">{t}</option>)}</select></div>
                   <div className="space-y-2"><Label htmlFor="city" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">City</Label><Input id="city" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Karachi" required className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="location" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Location</Label><Input id="location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="DHA Phase 6" className={inputClass} /></div>

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { pkrSpoken } from "@/lib/voice-format"
+import { eurSpoken } from "@/lib/voice-format"
 
 /**
  * mortgage_estimate — estimate a monthly payment. Pure math, no database.
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams
   const price = Number(sp.get("price"))
   if (!Number.isFinite(price) || price <= 0) {
-    return NextResponse.json({ error: "Provide a positive 'price' in PKR." }, { status: 400 })
+    return NextResponse.json({ error: "Provide a positive 'price' in EUR (euros)." }, { status: 400 })
   }
 
   const downPayment = Math.max(0, Number(sp.get("down_payment")) || 0)
@@ -36,15 +36,15 @@ export async function GET(req: NextRequest) {
   const totalInterest = Math.max(0, totalPaid - principal)
 
   return NextResponse.json({
-    inputs: { price_pkr: price, down_payment_pkr: downPayment, annual_rate_percent: rate, years },
-    loan_amount_pkr: principal,
-    monthly_payment_pkr: monthlyRounded,
-    monthly_payment_spoken: `${pkrSpoken(monthlyRounded)} PKR per month`,
-    total_paid_pkr: totalPaid,
-    total_interest_pkr: totalInterest,
+    inputs: { price_eur: price, down_payment_eur: downPayment, annual_rate_percent: rate, years },
+    loan_amount_eur: principal,
+    monthly_payment_eur: monthlyRounded,
+    monthly_payment_spoken: `${eurSpoken(monthlyRounded)} euros per month`,
+    total_paid_eur: totalPaid,
+    total_interest_eur: totalInterest,
     spoken_summary:
-      `On a ${pkrSpoken(price)} PKR property with ${pkrSpoken(downPayment)} PKR down, ` +
-      `a ${years}-year loan at ${rate}% would be roughly ${pkrSpoken(monthlyRounded)} PKR per month. ` +
+      `On a ${eurSpoken(price)} euros property with ${eurSpoken(downPayment)} euros down, ` +
+      `a ${years}-year loan at ${rate}% would be roughly ${eurSpoken(monthlyRounded)} euros per month. ` +
       `This is only an estimate.`,
     disclaimer: "Estimate only — actual terms depend on the bank and the buyer's profile.",
   })

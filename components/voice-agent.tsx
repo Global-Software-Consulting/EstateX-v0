@@ -4,7 +4,7 @@ import Script from "next/script"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { supabase } from "@/lib/supabase"
-import { pkrSpoken } from "@/lib/voice-format"
+import { eurSpoken } from "@/lib/voice-format"
 
 /**
  * Routes where the public voice agent should NOT appear.
@@ -115,7 +115,7 @@ export function VoiceAgent() {
             .map((r: any) => (Array.isArray(r.properties) ? r.properties[0] : r.properties))
             .filter(Boolean) as { title: string; city: string; price: number }[]
           if (rows.length === 0) return "The visitor hasn't saved any properties yet."
-          const list = rows.map((p) => `${p.title} in ${p.city}, ${pkrSpoken(p.price)} PKR`).join("; ")
+          const list = rows.map((p) => `${p.title} in ${p.city}, ${eurSpoken(p.price)} euros`).join("; ")
           return `The visitor has ${rows.length} saved ${rows.length === 1 ? "property" : "properties"}: ${list}.`
         },
 
