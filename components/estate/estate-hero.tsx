@@ -243,7 +243,7 @@ export function EstateHero() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" />
               <span className="text-[11px] font-medium tracking-wide text-white/70">
-                #1 Real Estate Platform in Pakistan
+                #1 Real Estate Platform in Europe
               </span>
             </motion.div>
 
@@ -357,7 +357,7 @@ export function EstateHero() {
               className="mt-4 flex flex-wrap items-center gap-2"
             >
               <span className="text-[11px] text-white/25">Trending:</span>
-              {["Islamabad", "Lahore", "Karachi", "Rawalpindi"].map((c) => (
+              {["Paris", "London", "Berlin", "Amsterdam"].map((c) => (
                 <button
                   key={c}
                   onClick={() => { setCity(c); router.push(`/listings?city=${c}`) }}

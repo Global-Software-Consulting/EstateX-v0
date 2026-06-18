@@ -4,7 +4,7 @@ import { eurSpoken } from "@/lib/voice-format"
 /**
  * mortgage_estimate — estimate a monthly payment. Pure math, no database.
  *
- *   GET /api/voice/mortgage?price=20000000&down_payment=4000000&annual_rate=20&years=20
+ *   GET /api/voice/mortgage?price=20000000&down_payment=4000000&annual_rate=4&years=25
  *
  * Only `price` is required. Sensible defaults are used for the rest so the agent
  * can give a quick figure even with partial info. This is an ESTIMATE, not an
@@ -19,9 +19,9 @@ export async function GET(req: NextRequest) {
 
   const downPayment = Math.max(0, Number(sp.get("down_payment")) || 0)
   const annualRate = Number(sp.get("annual_rate"))
-  const rate = Number.isFinite(annualRate) && annualRate >= 0 ? annualRate : 20 // % default
+  const rate = Number.isFinite(annualRate) && annualRate >= 0 ? annualRate : 4 // % default (European norm)
   const yearsRaw = Number(sp.get("years"))
-  const years = Number.isFinite(yearsRaw) && yearsRaw > 0 ? yearsRaw : 20 // default term
+  const years = Number.isFinite(yearsRaw) && yearsRaw > 0 ? yearsRaw : 25 // default term
 
   const principal = Math.max(0, price - downPayment)
   const months = Math.round(years * 12)

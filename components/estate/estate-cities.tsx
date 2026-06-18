@@ -20,7 +20,7 @@ export function EstateCities() {
             Explore by City
           </h2>
           <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
-            Drag or scroll to explore Pakistan&apos;s most sought-after locations
+            Drag or scroll to explore Europe&apos;s most sought-after locations
           </p>
         </div>
       </div>

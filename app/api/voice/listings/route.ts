@@ -16,7 +16,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
  * Public, read-only listings search for the ElevenLabs voice agent.
  *
  * Called as a server tool (webhook). Example:
- *   GET /api/voice/listings?category=buy&type=House&city=Lahore&max_price=20000000&min_bedrooms=3
+ *   GET /api/voice/listings?category=buy&type=House&city=Paris&max_price=2000000&min_bedrooms=3
  *
  * All params are optional; omit them to get the latest active listings.
  */
@@ -24,12 +24,12 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams
   const category = sp.get("category")        // "buy" | "rent"
   const type = sp.get("type")                // "House" | "Apartment" | "Villa" | ...
-  const city = sp.get("city")                // partial match, e.g. "Lahore"
+  const city = sp.get("city")                // partial match, e.g. "Paris"
   const maxPrice = sp.get("max_price")       // EUR number
   const minBedrooms = sp.get("min_bedrooms") // number
-  // Free-text keyword, e.g. "villa", "mansion", "DHA". Matches title/description/
+  // Free-text keyword, e.g. "villa", "penthouse", "canal". Matches title/description/
   // location too, so words people use ("villa") still find listings whose TYPE is
-  // something else (e.g. a House titled "DHA Phase 6 Villa").
+  // something else (e.g. an Apartment titled "Haussmann Apartment").
   const q = (sp.get("q") || "").replace(/[(),]/g, " ").trim() // strip chars that break .or()
   // Keep this small: fewer listings = less for the voice LLM to read = faster speech.
   const limit = Math.min(Number(sp.get("limit")) || 4, 10)
