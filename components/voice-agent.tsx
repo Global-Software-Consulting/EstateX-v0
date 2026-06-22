@@ -2,9 +2,10 @@
 
 import Script from "next/script"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { supabase } from "@/lib/supabase"
 import { eurSpoken } from "@/lib/voice-format"
+import { VoiceLeadForm } from "@/components/voice-lead-form"
 
 /**
  * Routes where the public voice agent should NOT appear.
@@ -22,12 +23,31 @@ export function VoiceAgent() {
   const agentId = process.env.NEXT_PUBLIC_ELEVENLABS_AGENT_ID
   const hidden = !agentId || HIDDEN_PREFIXES.some((prefix) => pathname?.startsWith(prefix))
 
+  // When ElevenLabs credits run out the widget can't start a conversation, which
+  // looks broken to visitors. We detect that server-side (/api/voice/health) and
+  // swap the agent for a lead-capture form so the visitor still reaches us.
+  // NEXT_PUBLIC_VOICE_MODE can force "agent" or "form"; default = auto-detect.
+  const forced = process.env.NEXT_PUBLIC_VOICE_MODE
+  const [mode, setMode] = useState<"loading" | "agent" | "form">(
+    forced === "form" ? "form" : forced === "agent" ? "agent" : "loading",
+  )
+
+  useEffect(() => {
+    if (hidden || forced === "form" || forced === "agent") return
+    let cancelled = false
+    fetch("/api/voice/health")
+      .then((r) => r.json())
+      .then((d) => { if (!cancelled) setMode(d?.creditsAvailable ? "agent" : "form") })
+      .catch(() => { if (!cancelled) setMode("agent") }) // on error, keep the agent
+    return () => { cancelled = true }
+  }, [hidden, forced])
+
   // Register CLIENT tools — these run in the browser so the agent can drive the
   // UI by voice. The function names here MUST match the client tools configured
   // in the ElevenLabs dashboard. ElevenLabs fires "elevenlabs-convai:call" when a
   // conversation starts; we attach our tools to its config then.
   useEffect(() => {
-    if (hidden) return
+    if (hidden || mode !== "agent") return
     const el = document.querySelector("elevenlabs-convai")
     if (!el) return
 
@@ -153,10 +173,16 @@ export function VoiceAgent() {
 
     el.addEventListener("elevenlabs-convai:call", handler)
     return () => el.removeEventListener("elevenlabs-convai:call", handler)
-  }, [hidden, router, pathname])
+  }, [hidden, mode, router, pathname])
 
   // Render nothing until an agent is configured, or on protected/auth routes.
   if (hidden) return null
+
+  // Credits exhausted (or forced) → show the lead-capture form instead.
+  if (mode === "form") return <VoiceLeadForm />
+
+  // Still detecting credit status → render nothing to avoid a flash.
+  if (mode === "loading") return null
 
   return (
     <>
