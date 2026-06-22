@@ -17,9 +17,19 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Provide a positive 'price' in EUR (euros)." }, { status: 400 })
   }
 
+  // down_payment defaults to 0 when omitted (a real, intended default).
   const downPayment = Math.max(0, Number(sp.get("down_payment")) || 0)
-  const annualRate = Number(sp.get("annual_rate"))
-  const rate = Number.isFinite(annualRate) && annualRate >= 0 ? annualRate : 4 // % default (European norm)
+
+  // annual_rate defaults to 4% when omitted. NOTE: a missing param parses to 0,
+  // which would pass a ">= 0" check and wrongly compute a 0%-interest loan — so we
+  // check the raw param is actually present before trusting its numeric value.
+  const rateRaw = sp.get("annual_rate")
+  const rate =
+    rateRaw !== null && rateRaw !== "" && Number.isFinite(Number(rateRaw)) && Number(rateRaw) >= 0
+      ? Number(rateRaw)
+      : 4 // % default (European norm)
+
+  // years defaults to 25 when omitted (Number(null) -> 0 fails the "> 0" check).
   const yearsRaw = Number(sp.get("years"))
   const years = Number.isFinite(yearsRaw) && yearsRaw > 0 ? yearsRaw : 25 // default term
 
