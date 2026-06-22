@@ -27,10 +27,25 @@ export async function GET(req: NextRequest) {
   const city = sp.get("city")                // partial match, e.g. "Paris"
   const maxPrice = sp.get("max_price")       // EUR number
   const minBedrooms = sp.get("min_bedrooms") // number
-  // Free-text keyword, e.g. "villa", "penthouse", "canal". Matches title/description/
-  // location too, so words people use ("villa") still find listings whose TYPE is
-  // something else (e.g. an Apartment titled "Haussmann Apartment").
-  const q = (sp.get("q") || "").replace(/[(),]/g, " ").trim() // strip chars that break .or()
+
+  // Free-text keywords, e.g. "Paris apartment", "canal townhouse". We TOKENIZE the
+  // phrase and match ANY word across title/description/location/type/city, so a
+  // multi-word query still finds a listing even when no single field contains the
+  // whole phrase (e.g. "Paris apartment": city="Paris" + type="Apartment"). Common
+  // conversational filler words are ignored so they don't drown out real keywords.
+  const STOPWORDS = new Set([
+    "the", "a", "an", "in", "on", "at", "for", "me", "my", "about", "tell", "show",
+    "find", "any", "some", "with", "and", "or", "to", "of", "is", "are", "do", "does",
+    "you", "your", "please", "can", "could", "would", "more", "info", "information",
+    "looking", "want", "need", "place", "places", "property", "properties", "listing",
+    "listings", "one", "ones", "that", "this", "it",
+  ])
+  const qTokens = (sp.get("q") || "")
+    .replace(/[%(),]/g, " ") // strip chars that break .ilike()/.or()
+    .split(/\s+/)
+    .map((t) => t.trim())
+    .filter((t) => t.length > 1 && !STOPWORDS.has(t.toLowerCase()))
+
   // Keep this small: fewer listings = less for the voice LLM to read = faster speech.
   const limit = Math.min(Number(sp.get("limit")) || 4, 10)
 
@@ -45,7 +60,11 @@ export async function GET(req: NextRequest) {
   if (category) query = query.eq("category", category.toLowerCase())
   if (type && type.toLowerCase() !== "all") query = query.ilike("type", type)
   if (city) query = query.ilike("city", `%${city}%`)
-  if (q) query = query.or(`title.ilike.%${q}%,description.ilike.%${q}%,location.ilike.%${q}%,type.ilike.%${q}%`)
+  if (qTokens.length) {
+    const fields = ["title", "description", "location", "type", "city"]
+    const conds = qTokens.flatMap((t) => fields.map((f) => `${f}.ilike.%${t}%`))
+    query = query.or(conds.join(","))
+  }
   if (maxPrice && !Number.isNaN(Number(maxPrice))) query = query.lte("price", Number(maxPrice))
   if (minBedrooms && !Number.isNaN(Number(minBedrooms))) query = query.gte("bedrooms", Number(minBedrooms))
 
