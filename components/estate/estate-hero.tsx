@@ -19,25 +19,25 @@ const propertyTypes = ["House", "Apartment", "Villa", "Townhouse", "Loft", "Cabi
 const tourSlides = [
   {
     image: "/house-3.jpg",
-    title: "Modern Minimalist Villa",
-    location: "Islamabad, F-7",
-    price: "PKR 4.5 Cr",
-    beds: 5, baths: 4, sqft: "4,200",
+    title: "Cascais Coastal Villa",
+    location: "Cascais, Lisbon",
+    price: "€1.65M",
+    beds: 5, baths: 4, sqft: "3,400",
     tag: "Featured",
   },
   {
     image: "/house-3.jpg",
-    title: "Luxury Lake View Estate",
-    location: "Lahore, DHA Phase 6",
-    price: "PKR 7.2 Cr",
+    title: "Belgravia Mews House",
+    location: "Belgravia, London",
+    price: "€4.95M",
     beds: 7, baths: 6, sqft: "8,500",
     tag: "Premium",
   },
   {
     image: "/house-3.jpg",
-    title: "Contemporary Urban Loft",
-    location: "Karachi, Clifton",
-    price: "PKR 2.8 Cr",
+    title: "Kreuzberg Industrial Loft",
+    location: "Kreuzberg, Berlin",
+    price: "€780K",
     beds: 3, baths: 2, sqft: "2,400",
     tag: "New",
   },
@@ -243,7 +243,7 @@ export function EstateHero() {
             >
               <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" />
               <span className="text-[11px] font-medium tracking-wide text-white/70">
-                #1 Real Estate Platform in Pakistan
+                #1 Real Estate Platform in Europe
               </span>
             </motion.div>
 
@@ -357,7 +357,7 @@ export function EstateHero() {
               className="mt-4 flex flex-wrap items-center gap-2"
             >
               <span className="text-[11px] text-white/25">Trending:</span>
-              {["Islamabad", "Lahore", "Karachi", "Rawalpindi"].map((c) => (
+              {["Paris", "London", "Berlin", "Amsterdam"].map((c) => (
                 <button
                   key={c}
                   onClick={() => { setCity(c); router.push(`/listings?city=${c}`) }}

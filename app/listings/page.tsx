@@ -28,7 +28,7 @@ const propertyTypes = ["All", "House", "Apartment", "Villa", "Townhouse", "Loft"
 const categories = ["All", "buy", "rent"] as const
 
 function formatPrice(price: number) {
-  return `PKR ${price.toLocaleString()}`
+  return `€${price.toLocaleString()}`
 }
 
 function ListingsContent() {
@@ -44,6 +44,15 @@ function ListingsContent() {
   )
   const [typeFilter, setTypeFilter] = useState(initialType || "All")
   const [citySearch, setCitySearch] = useState(initialCity || "")
+
+  // Keep filters in sync with the URL. The voice agent's apply_filters tool
+  // navigates here with query params; this updates the UI even when the page
+  // is already open (soft navigation doesn't remount the component).
+  useEffect(() => {
+    setCategoryFilter(initialCategory === "buy" || initialCategory === "rent" ? initialCategory : "All")
+    setTypeFilter(initialType || "All")
+    setCitySearch(initialCity || "")
+  }, [initialCategory, initialType, initialCity])
 
   useEffect(() => {
     async function fetchAll() {

@@ -22,7 +22,7 @@ export default function SignUpPage() {
     setError("")
     setLoading(true)
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -34,6 +34,16 @@ export default function SignUpPage() {
       setError(error.message)
       setLoading(false)
       return
+    }
+
+    // Best-effort: create the profiles row now if a session was issued
+    // (i.e. email confirmation is off). If confirmation is on there's no session
+    // yet and RLS blocks this — the dashboard creates the profile on first login.
+    if (data.session && data.user) {
+      await supabase.from("profiles").upsert(
+        { id: data.user.id, full_name: fullName },
+        { onConflict: "id", ignoreDuplicates: true },
+      )
     }
 
     router.push("/")

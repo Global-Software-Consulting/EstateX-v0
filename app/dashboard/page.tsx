@@ -31,7 +31,7 @@ type SavedRow = {
 }
 
 const propertyTypes = ["House", "Apartment", "Villa", "Townhouse", "Loft", "Cabin"] as const
-function formatPrice(price: number) { return `PKR ${price.toLocaleString()}` }
+function formatPrice(price: number) { return `€${price.toLocaleString()}` }
 const emptyForm = { title: "", description: "", price: "", type: "House", category: "buy", bedrooms: "", bathrooms: "", area_sqft: "", city: "", location: "" }
 
 export default function DashboardPage() {
@@ -87,8 +87,15 @@ export default function DashboardPage() {
   ]
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.replace("/sign-in"); return }
+      // Ensure a profiles row exists for this user. properties.agent_id has an FK
+      // to profiles, so without this the first "Add Property" insert fails (23503).
+      // Safe to run every load: onConflict(id) makes it a no-op if it already exists.
+      await supabase.from("profiles").upsert(
+        { id: user.id, full_name: user.user_metadata?.full_name ?? null },
+        { onConflict: "id", ignoreDuplicates: true },
+      )
       setUser(user)
       setLoading(false)
     })
@@ -181,12 +188,23 @@ export default function DashboardPage() {
 
   function handleCancelEdit() { setEditingId(null); setForm({ ...emptyForm }); setImageFiles([]); setFormError(""); setFormSuccess(false) }
 
-  async function uploadImages(propertyId: string, agentId: string) {
+  async function uploadImages(propertyId: string, agentId: string): Promise<boolean> {
+    const uploadedPaths: string[] = []
+    // Undo any partial work (storage files + image rows) so a failure leaves nothing behind.
+    const rollback = async () => {
+      if (uploadedPaths.length === 0) return
+      await supabase.from("property_images").delete().eq("property_id", propertyId).in("storage_path", uploadedPaths)
+      await supabase.storage.from("property-images").remove(uploadedPaths)
+    }
     for (let i = 0; i < imageFiles.length; i++) {
       const file = imageFiles[i]; const path = `${agentId}/${propertyId}/${file.name}`
-      const { error } = await supabase.storage.from("property-images").upload(path, file, { upsert: true })
-      if (!error) await supabase.from("property_images").insert({ property_id: propertyId, storage_path: path, is_cover: i === 0 })
+      const { error: uploadError } = await supabase.storage.from("property-images").upload(path, file, { upsert: false })
+      if (uploadError) { await rollback(); setFormError(`Image upload failed: ${uploadError.message}`); return false }
+      uploadedPaths.push(path)
+      const { error: insertError } = await supabase.from("property_images").insert({ property_id: propertyId, storage_path: path, is_cover: i === 0 })
+      if (insertError) { await rollback(); setFormError(`Saving image record failed: ${insertError.message}`); return false }
     }
+    return true
   }
 
   async function handleSubmitProperty(e: React.FormEvent) {
@@ -197,12 +215,22 @@ export default function DashboardPage() {
     if (editingId) {
       const { error } = await supabase.from("properties").update(payload).eq("id", editingId).eq("agent_id", user.id)
       if (error) { setFormError(error.message); setFormLoading(false); return }
-      if (imageFiles.length > 0) await uploadImages(editingId, user.id)
+      if (imageFiles.length > 0) {
+        const ok = await uploadImages(editingId, user.id)
+        if (!ok) { setFormLoading(false); fetchProperties(); return }
+      }
       setFormSuccess(true); setFormLoading(false); setEditingId(null); setForm({ ...emptyForm }); setImageFiles([]); fetchProperties()
     } else {
       const { data, error } = await supabase.from("properties").insert({ ...payload, agent_id: user.id }).select("id").single()
       if (error || !data) { setFormError(error?.message || "Failed"); setFormLoading(false); return }
-      if (imageFiles.length > 0) await uploadImages(data.id, user.id)
+      if (imageFiles.length > 0) {
+        const ok = await uploadImages(data.id, user.id)
+        if (!ok) {
+          // Images failed → roll back the just-created property so nothing is stored.
+          await supabase.from("properties").delete().eq("id", data.id).eq("agent_id", user.id)
+          setFormLoading(false); fetchProperties(); return
+        }
+      }
       setFormSuccess(true); setFormLoading(false); setForm({ ...emptyForm }); setImageFiles([]); fetchProperties()
     }
   }
@@ -534,12 +562,12 @@ export default function DashboardPage() {
 
               <form onSubmit={handleSubmitProperty} className="mt-10 max-w-2xl space-y-6">
                 <div className="grid gap-6 sm:grid-cols-2">
-                  <div className="space-y-2 sm:col-span-2"><Label htmlFor="title" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Title</Label><Input id="title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. DHA Phase 6 Villa" required className={inputClass} /></div>
+                  <div className="space-y-2 sm:col-span-2"><Label htmlFor="title" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Title</Label><Input id="title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Cascais Coastal Villa" required className={inputClass} /></div>
                   <div className="space-y-2 sm:col-span-2"><Label htmlFor="description" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Description</Label><textarea id="description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Describe the property..." rows={4} className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none placeholder:text-muted-foreground/50 focus-visible:border-orange-500 focus-visible:ring-[3px] focus-visible:ring-orange-500/20" /></div>
-                  <div className="space-y-2"><Label htmlFor="price" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Price (PKR)</Label><Input id="price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="85000000" required className={inputClass} /></div>
+                  <div className="space-y-2"><Label htmlFor="price" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Price (EUR)</Label><Input id="price" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="850000" required className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="type" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Property Type</Label><select id="type" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })} className="h-12 w-full rounded-xl border border-border bg-card px-4 text-sm outline-none focus-visible:border-orange-500 focus-visible:ring-[3px] focus-visible:ring-orange-500/20">{propertyTypes.map((t) => <option key={t} value={t} className="bg-card">{t}</option>)}</select></div>
-                  <div className="space-y-2"><Label htmlFor="city" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">City</Label><Input id="city" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Karachi" required className={inputClass} /></div>
-                  <div className="space-y-2"><Label htmlFor="location" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Location</Label><Input id="location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="DHA Phase 6" className={inputClass} /></div>
+                  <div className="space-y-2"><Label htmlFor="city" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">City</Label><Input id="city" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} placeholder="Paris" required className={inputClass} /></div>
+                  <div className="space-y-2"><Label htmlFor="location" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Location</Label><Input id="location" value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="8th Arrondissement" className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="bedrooms" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Bedrooms</Label><Input id="bedrooms" type="number" value={form.bedrooms} onChange={(e) => setForm({ ...form, bedrooms: e.target.value })} placeholder="3" required className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="bathrooms" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Bathrooms</Label><Input id="bathrooms" type="number" value={form.bathrooms} onChange={(e) => setForm({ ...form, bathrooms: e.target.value })} placeholder="2" required className={inputClass} /></div>
                   <div className="space-y-2"><Label htmlFor="area_sqft" className="font-mono text-xs uppercase tracking-widest text-muted-foreground">Area (sqft)</Label><Input id="area_sqft" type="number" value={form.area_sqft} onChange={(e) => setForm({ ...form, area_sqft: e.target.value })} placeholder="2400" required className={inputClass} /></div>

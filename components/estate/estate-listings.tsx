@@ -21,7 +21,7 @@ type FeaturedProperty = {
 }
 
 function formatPrice(price: number) {
-  return `PKR ${price.toLocaleString()}`
+  return `€${price.toLocaleString()}`
 }
 
 export function EstateListings() {

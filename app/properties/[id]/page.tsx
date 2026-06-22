@@ -19,7 +19,7 @@ type PropertyDetail = {
   agent: { full_name: string | null; phone: string | null } | null
 }
 
-function formatPrice(price: number) { return `PKR ${price.toLocaleString()}` }
+function formatPrice(price: number) { return `€${price.toLocaleString()}` }
 
 export default function PropertyPage() {
   const params = useParams()

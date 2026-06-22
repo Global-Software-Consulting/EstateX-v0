@@ -5,58 +5,58 @@ import { TestimonialsColumn, type Testimonial } from "@/components/ui/testimonia
 
 const testimonials: Testimonial[] = [
   {
-    text: "EstateX made finding our dream home in F-7 incredibly easy. The inquiry system connected us directly with the agent, and we closed the deal within two weeks!",
+    text: "EstateX made finding our dream home in the 8th Arrondissement incredibly easy. The inquiry system connected us directly with the agent, and we closed the deal within two weeks!",
     image: "https://randomuser.me/api/portraits/women/1.jpg",
-    name: "Ayesha Tariq",
-    role: "Homebuyer, Islamabad",
+    name: "Camille Laurent",
+    role: "Homebuyer, Paris",
   },
   {
     text: "As an agent, the dashboard is a game-changer. I manage all my listings, track inquiries, and respond to buyers in one place. My sales increased 40% since joining.",
     image: "https://randomuser.me/api/portraits/men/2.jpg",
-    name: "Bilal Ahmed",
-    role: "Property Agent, Lahore",
+    name: "Lukas Weber",
+    role: "Property Agent, Berlin",
   },
   {
-    text: "I found a beautiful apartment in Clifton within my budget. The filtering system is excellent and the property pages give all the information I need.",
+    text: "I found a beautiful apartment in Montmartre within my budget. The filtering system is excellent and the property pages give all the information I need.",
     image: "https://randomuser.me/api/portraits/women/3.jpg",
-    name: "Saman Malik",
-    role: "Renter, Karachi",
+    name: "Sofia Bernard",
+    role: "Renter, Paris",
   },
   {
-    text: "Listed my DHA Phase 6 villa and received 12 genuine inquiries in the first week. EstateX filters out spam and connects you with serious buyers only.",
+    text: "Listed my Belgravia townhouse and received 12 genuine inquiries in the first week. EstateX filters out spam and connects you with serious buyers only.",
     image: "https://randomuser.me/api/portraits/men/4.jpg",
-    name: "Hassan Ali",
-    role: "Villa Seller, Karachi",
+    name: "James Whitfield",
+    role: "Property Seller, London",
   },
   {
-    text: "The saved properties feature helped me compare options across Bahria Town before making my decision. The whole experience was smooth and professional.",
+    text: "The saved properties feature helped me compare options across the Eixample district before making my decision. The whole experience was smooth and professional.",
     image: "https://randomuser.me/api/portraits/women/5.jpg",
-    name: "Zainab Hussain",
-    role: "First-time Buyer, Rawalpindi",
+    name: "Marta García",
+    role: "First-time Buyer, Barcelona",
   },
   {
-    text: "Moving to Islamabad for work was stressful, but EstateX helped me find the perfect rental in E-11 within days. The booking viewing feature is brilliant.",
+    text: "Moving to Berlin for work was stressful, but EstateX helped me find the perfect rental in Kreuzberg within days. The booking viewing feature is brilliant.",
     image: "https://randomuser.me/api/portraits/men/6.jpg",
-    name: "Omar Sheikh",
-    role: "Tenant, Islamabad",
+    name: "Daniel Schmidt",
+    role: "Tenant, Berlin",
   },
   {
-    text: "I've been investing in Lahore property for years. EstateX gives me a clear overview of the market with real listings and transparent pricing. Highly recommend.",
+    text: "I've been investing in London property for years. EstateX gives me a clear overview of the market with real listings and transparent pricing. Highly recommend.",
     image: "https://randomuser.me/api/portraits/men/7.jpg",
-    name: "Farhan Siddiqui",
-    role: "Investor, Lahore",
+    name: "Oliver Bennett",
+    role: "Investor, London",
   },
   {
     text: "The platform's dark design looks stunning and the property image galleries are top notch. It feels premium, which matches the quality of listings.",
     image: "https://randomuser.me/api/portraits/women/8.jpg",
-    name: "Sana Khan",
-    role: "Interior Designer, Karachi",
+    name: "Isabella Conti",
+    role: "Interior Designer, Rome",
   },
   {
-    text: "EstateX transformed how I sell properties. The image upload, inquiry tracking, and status management save me hours every week. Best platform in Pakistan.",
+    text: "EstateX transformed how I sell properties. The image upload, inquiry tracking, and status management save me hours every week. Best platform in Europe.",
     image: "https://randomuser.me/api/portraits/men/9.jpg",
-    name: "Usman Raza",
-    role: "Senior Agent, Multan",
+    name: "Miguel Santos",
+    role: "Senior Agent, Lisbon",
   },
 ]
 
@@ -83,7 +83,7 @@ export function EstateTestimonials() {
             What Our Users <span className="word-gradient">Say</span>
           </h2>
           <p className="mt-4 text-center text-sm leading-relaxed text-muted-foreground">
-            Trusted by thousands of buyers, renters, and agents across Pakistan
+            Trusted by thousands of buyers, renters, and agents across Europe
           </p>
         </motion.div>
 
