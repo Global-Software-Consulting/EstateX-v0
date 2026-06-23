@@ -19,6 +19,15 @@ export function VoiceLeadForm() {
   const input =
     "h-11 w-full rounded-xl border border-border bg-background px-3.5 text-sm outline-none focus:border-orange-500 focus:ring-[3px] focus:ring-orange-500/20"
 
+  // Closing resets everything so a reopened widget starts fresh (otherwise a prior
+  // "Thank you!" / error state would persist until the component remounts).
+  function close() {
+    setOpen(false)
+    setDone(false)
+    setError("")
+    setForm({ firstName: "", lastName: "", email: "", phone: "" })
+  }
+
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     setError("")
@@ -55,7 +64,7 @@ export function VoiceLeadForm() {
   return (
     <div className="fixed bottom-6 right-6 z-50 w-[min(92vw,380px)] rounded-2xl border border-border bg-card p-5 shadow-2xl">
       <button
-        onClick={() => setOpen(false)}
+        onClick={close}
         className="absolute right-3 top-3 flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         aria-label="Close"
       >
@@ -83,6 +92,8 @@ export function VoiceLeadForm() {
             <input
               className={input}
               placeholder="First name"
+              aria-label="First name"
+              maxLength={100}
               required
               value={form.firstName}
               onChange={(e) => setForm({ ...form, firstName: e.target.value })}
@@ -90,6 +101,8 @@ export function VoiceLeadForm() {
             <input
               className={input}
               placeholder="Last name"
+              aria-label="Last name"
+              maxLength={100}
               value={form.lastName}
               onChange={(e) => setForm({ ...form, lastName: e.target.value })}
             />
@@ -98,6 +111,8 @@ export function VoiceLeadForm() {
             className={input}
             type="email"
             placeholder="Email"
+            aria-label="Email"
+            maxLength={254}
             required
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -106,6 +121,8 @@ export function VoiceLeadForm() {
             className={input}
             type="tel"
             placeholder="Phone number"
+            aria-label="Phone number"
+            maxLength={40}
             value={form.phone}
             onChange={(e) => setForm({ ...form, phone: e.target.value })}
           />

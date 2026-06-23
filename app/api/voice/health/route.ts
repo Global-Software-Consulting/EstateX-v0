@@ -27,7 +27,12 @@ export async function GET() {
       headers: { "xi-api-key": key },
       cache: "no-store",
     })
-    if (!res.ok) return NextResponse.json({ creditsAvailable: true, reason: `status-${res.status}` })
+    if (!res.ok) {
+      // Cache the failure too, so a flapping/rate-limited API isn't re-hit every
+      // page load. We still report available so the agent stays visible.
+      cache = { ts: now, available: true }
+      return NextResponse.json({ creditsAvailable: true, reason: `status-${res.status}` })
+    }
     const d: any = await res.json()
     const used = Number(d.character_count ?? 0)
     const limit = Number(d.character_limit ?? 0)
@@ -35,6 +40,7 @@ export async function GET() {
     cache = { ts: now, available }
     return NextResponse.json({ creditsAvailable: available, used, limit })
   } catch {
+    cache = { ts: now, available: true }
     return NextResponse.json({ creditsAvailable: true, reason: "error" })
   }
 }

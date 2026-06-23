@@ -20,10 +20,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 })
   }
 
-  const firstName = (body?.firstName || "").toString().trim()
-  const lastName = (body?.lastName || "").toString().trim()
-  const email = (body?.email || "").toString().trim()
-  const phone = (body?.phone || "").toString().trim()
+  // Cap field lengths so a hostile/huge payload can't be stuffed into the email.
+  const clip = (v: unknown, max: number) => (v || "").toString().trim().slice(0, max)
+  const firstName = clip(body?.firstName, 100)
+  const lastName = clip(body?.lastName, 100)
+  const email = clip(body?.email, 254) // RFC 5321 max email length
+  const phone = clip(body?.phone, 40)
 
   if (!firstName || !email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return NextResponse.json({ error: "Please provide a first name and a valid email." }, { status: 400 })
